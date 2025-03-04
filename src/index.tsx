@@ -1,3 +1,3 @@
 import GitHubCalendar from "./GitHubCalendar";
-import "./style.css";
+import "./calenderStyles.css";
 export default GitHubCalendar;
