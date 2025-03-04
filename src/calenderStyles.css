@@ -1,0 +1,106 @@
+/* General container */
+.github-calendar-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 6px;
+    width: 100%;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+  }
+  
+  /* Month Labels */
+  .github-calendar-month-labels {
+    display: grid;
+    grid-template-columns: auto repeat(53, minmax(0, 1fr));
+    font-size: 10px;
+    font-weight: 500;
+    color: #4b5563;
+  }
+  .github-calendar-month-labels div {
+    text-align: center;
+  }
+  
+  /* Grid Layout */
+  .github-calendar-grid {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto repeat(53, minmax(0, 1fr));
+    gap: 2px;
+  }
+  
+  /* Day Labels */
+  .github-calendar-days {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .github-calendar-day {
+    font-size: 8px;
+    color: #6b7280;
+    width: 16px;
+  }
+  
+  /* Contribution Box */
+  .github-calendar-box {
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+  }
+  .github-calendar-box:hover {
+    transform: scale(1.1);
+  }
+  .github-calendar-box-active {
+    transform: scale(1.05);
+    animation: pulse 1.5s infinite;
+  }
+  
+  @keyframes pulse {
+    0% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.6;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  
+  /* Contribution legend */
+  .github-calendar-legend {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 8px;
+  }
+  .github-calendar-legend-box {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+  }
+  
+  /* Total Contributions */
+  .github-calendar-total {
+    position: absolute;
+    left: 20px;
+    bottom: -20px;
+    font-size: 8px;
+  }
+  .github-calendar-legend-container {
+    position: absolute;
+    bottom: -20px;
+    right: 40px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  
+  .github-calendar-column {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  
