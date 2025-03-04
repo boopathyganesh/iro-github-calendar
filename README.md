@@ -2,7 +2,7 @@
 
 A customizable React component that displays a **GitHub-style contribution heatmap**.
 
-![GitHub Contribution Calendar Example](https://raw.githubusercontent.com/your-repo/readme-assets/calendar-preview.png)
+![GitHub Contribution Calendar Example](src/GithubCalendar-example.png)
 
 ---
 
