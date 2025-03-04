@@ -1,6 +1,6 @@
 # GitHub Contribution Calendar for React
 
-A customizable React component that displays a **GitHub-style contribution heatmap**.
+A customizable React component that displays a **GitHub-style contribution heatmap**. Auto adaptable for both Tailwind and Non Tailwind Projects
 
 ![GitHub Contribution Calendar Example](src/GithubCalendar-example.png)
 
