@@ -33,7 +33,7 @@
   "description": "A reusable GitHub contribution calendar for React",
   "repository": {
     "type": "git",
-    "url": "https://github.com/boopathyganesh/iro-github"
+    "url": "https://github.com/boopathyganesh/iro-github-calendar"
   },
   "keywords": [
     "github",
