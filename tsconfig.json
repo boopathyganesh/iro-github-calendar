@@ -13,5 +13,5 @@
     "esModuleInterop": true,
     "skipLibCheck": true
   },
-  "include": ["src", "src/declaration.d.ts"]
+  "include": ["src", "src/declaration.d.ts", "index.ts"]
 }
