@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { format, getMonth } from "date-fns";
-import "./calenderStyles.css"
-import { twMerge } from "tailwind-merge";
+import styles from "./calenderStyles.module.css";
+import clsx from "clsx";
 
 interface ContributionDay {
   date: string;
@@ -93,9 +93,6 @@ function lightenColor(hex: string, percent: number): string {
   return hslToHex(h, s, l);
 }
 
-function detectTailwind(): boolean {
-  return !!document.documentElement.style.getPropertyValue("--tw-bg-opacity");
-}
 
 const GitHubCalendar: React.FC<GitHubCalendarProps> = ({
   username,
@@ -107,7 +104,6 @@ const GitHubCalendar: React.FC<GitHubCalendarProps> = ({
   const [totalContribution, setTotalContribution] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [isTailwind, setIsTailwind] = useState<boolean>(false);
 
   const apiBaseUrl = "https://iro-github.vercel.app/github/calendar"
 
@@ -115,7 +111,6 @@ const GitHubCalendar: React.FC<GitHubCalendarProps> = ({
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setIsTailwind(detectTailwind());
         setLoading(true);
         const response = await axios.get(apiBaseUrl, {
           params: { username, start_year: startYear },
@@ -155,13 +150,13 @@ const GitHubCalendar: React.FC<GitHubCalendarProps> = ({
   // Track months that have been displayed
   const displayedMonths = new Set<number>();
 
-  if (loading) return <div className={"flex items-center justify-center text-sm lg:text-xl font-medium"}>Fetching Data from GitHub...</div>;
-  if (error) return <div className={"flex items-center justify-center text-sm lg:text-xl font-medium"}>{error}</div>;
+  if (loading) return <div className={styles.loader}>Fetching Data from GitHub...</div>;
+  if (error) return <div className={styles.loader}>{error}</div>;
   return (
-    <div className={twMerge("flex flex-col space-y-2 px-2 w-full rounded-lg border border-gray-300 p-1.5", classNames?.calenderContainer)}>
+    <div className={clsx(styles.githubCalendarContainer, classNames?.calenderContainer)}>
       {/* Month Labels */}
-      <div className={twMerge("grid grid-cols-[auto,repeat(53,minmax(0,1fr))] text-[0.5rem] lg:text-xs font-medium text-gray-600", classNames?.monthLabels)}>
-        <div className="w-5 lg:w-6"></div>
+      <div className={clsx(styles.githubCalendarMonthLabels, classNames?.monthLabels)}>
+        <div style={{ width: '1.25rem' }}></div>
         {contributions.map((week, weekIdx) => {
           const firstDayOfWeek = new Date(week.days[0]?.date);
           const month = getMonth(firstDayOfWeek);
@@ -170,7 +165,7 @@ const GitHubCalendar: React.FC<GitHubCalendarProps> = ({
           if (!displayedMonths.has(month)) {
             displayedMonths.add(month);
             return (
-              <div key={weekIdx} className="text-center col-span-1 select-none">
+              <div key={weekIdx}>
                 {monthNames[month]}
               </div>
             );
@@ -180,24 +175,24 @@ const GitHubCalendar: React.FC<GitHubCalendarProps> = ({
         })}
       </div>
 
-      <div className={twMerge("relative grid grid-cols-[auto,repeat(53,minmax(0,1fr))] gap-0.5", classNames?.dayLabels)}>
-        <div className={"flex flex-col gap-1"}>
+      <div className={clsx(styles.githubCalendarGrid, classNames?.dayLabels)}>
+        <div className={styles.githubCalendarDays}>
           {daysOfWeek.map((day, dayIdx) => (
-            <div key={dayIdx} className={"text-[0.5rem] lg:text-xs text-gray-500 w-5 lg:w-7 h-full select-none"}>
+            <div key={dayIdx} className={styles.githubCalendarDay}>
               {dayIdx % 2 !== 0 ? <div>{day}</div> : <div></div>}
             </div>
           ))}
         </div>
-        <div className={"absolute left-5 -bottom-8 text-[0.5rem] lg:text-xs"}>
+        <div className={styles.githubCalendarTotal}>
           Total Contributions : {totalContribution}
         </div>
-        <div className={twMerge("text-[0.5rem] lg:text-xs absolute -bottom-8 right-10 flex items-center justify-center gap-2 select-none", classNames?.gridClass)}>
+        <div className={clsx(styles.githubCalendarLegendContainer, classNames?.gridClass)}>
           <span>less</span>
-          <div className={"flex items-center justify-center gap-1"}>
+          <div className={styles.githubCalendarColumn}>
             {colors.map((color, dayIdx) => (
               <div
                 key={dayIdx}
-                className={"w-2.5 h-2.5 lg:w-3.5 lg:h-3.5 rounded-sm transition-all duration-200 cursor-pointer"}
+                className={styles.githubCalendarLegendBox}
                 style={{ backgroundColor: color }}
               />
             ))}
@@ -205,7 +200,7 @@ const GitHubCalendar: React.FC<GitHubCalendarProps> = ({
           <span>more</span>
         </div>
         {contributions.map((week, weekIdx) => (
-          <div key={weekIdx} className={"flex flex-col gap-1"}>
+          <div key={weekIdx} className={styles.githubCalendarDays}>
             {Array.from({ length: 7 }).map((_, dayIdx) => {
               const day =
                 week.days.find((d) => new Date(d.date).getDay() === dayIdx) ||
@@ -218,7 +213,7 @@ const GitHubCalendar: React.FC<GitHubCalendarProps> = ({
                 <div
                   key={dayIdx}
                   title={`${day.date}: ${day.contributions} contributions`}
-                  className={twMerge(`w-2.5 h-2.5 lg:w-3.5 lg:h-3.5 rounded-sm transition-all duration-200 cursor-pointer ${day.date === formattedDate ? "scale-105 animate-pulse" : ""}`, classNames?.gridClass)}
+                  className={clsx(styles.githubCalendarBox, ` ${day.date === formattedDate ? styles.today : ""}`, classNames?.gridClass)}
                   style={{ backgroundColor: day.date === "N/A" ? "transparent" : getColor(day.contributions) }}
                 />
               );

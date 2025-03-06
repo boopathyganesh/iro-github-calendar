@@ -1,0 +1,128 @@
+/* General container */
+.githubCalendarContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px;
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+}
+
+/* Month Labels */
+.githubCalendarMonthLabels {
+  display: grid;
+  grid-template-columns: auto repeat(53, minmax(0, 1fr));
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-weight: 600;
+  color: #4b5563;
+}
+.githubCalendarMonthLabels div {
+  text-align: center !important;
+  padding: 0 3px;
+}
+
+/* Grid Layout */
+.githubCalendarGrid {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto repeat(53, minmax(0, 1fr));
+  gap: 2px;
+}
+
+/* Day Labels */
+.githubCalendarDays {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.githubCalendarDay {
+  font-size: 0.75rem;
+  color: #6b7280;
+  width: 28px;
+  user-select: none;
+  display: flex;
+  height: 100%;
+}
+
+/* Contribution Box */
+.githubCalendarBox {
+  width: 14px;
+  height: 14px;
+  border-radius: 2px;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+}
+.githubCalendarBox:hover {
+  transform: scale(1.1);
+}
+.githubCalendarBoxActive {
+  transform: scale(1.05);
+  animation: pulse 1.5s infinite;
+}
+
+/* Contribution legend */
+.github-calendar-legend {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 8px;
+}
+.githubCalendarLegendBox {
+  width: 14px;
+  height: 14px;
+  border-radius: 2px;
+  transition-property: all !important;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1) !important;
+  transition-duration: 150ms !important;
+  transition-duration: 200ms !important;
+  cursor: pointer !important;
+}
+
+.today {
+  transform: scale(1.2);
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite !important;
+  -webkit-transform: scale(1.2);
+  -moz-transform: scale(1.2);
+  -ms-transform: scale(1.2);
+  -o-transform: scale(1.2);
+}
+
+@keyframes pulse {
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Total Contributions */
+.githubCalendarTotal {
+  position: absolute;
+  left: 40px;
+  bottom: -40px;
+  font-size: 14px;
+}
+.githubCalendarLegendContainer {
+  position: absolute;
+  bottom: -40px;
+  right: 40px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.githubCalendarColumn {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 4px;
+}
+
+.loader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem !important;
+  line-height: 1.25rem;
+  font-weight: 500;
+}
