@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { format, getMonth } from "date-fns";
 import "./calenderStyles.css"
+import { twMerge } from "tailwind-merge";
 
 interface ContributionDay {
   date: string;
@@ -16,8 +17,13 @@ interface WeekData {
 interface GitHubCalendarProps {
   username: string;
   startYear?: number;
-  apiBaseUrl?: string;
   theme?: string;
+  classNames?: {
+    calenderContainer: string,
+    monthLabels: string,
+    dayLabels: string,
+    gridClass: string,
+  }
 }
 
 function generateColorShades(userColor: string, steps: number = 3): string[] {
@@ -25,11 +31,11 @@ function generateColorShades(userColor: string, steps: number = 3): string[] {
   const shades = [baseColor];
 
   for (let i = steps; i >= 1; i--) {
-    const adjustedColor = lightenColor(userColor, i * 15); 
+    const adjustedColor = lightenColor(userColor, i * 15);
     shades.push(adjustedColor);
   }
 
-  shades.push(userColor); 
+  shades.push(userColor);
   return shades;
 }
 
@@ -94,14 +100,16 @@ function detectTailwind(): boolean {
 const GitHubCalendar: React.FC<GitHubCalendarProps> = ({
   username,
   startYear,
-  apiBaseUrl = "https://iro-github.vercel.app/github/calendar",
-  theme = "#216e39"
+  theme = "#216e39",
+  classNames
 }) => {
   const [contributions, setContributions] = useState<WeekData[]>([]);
   const [totalContribution, setTotalContribution] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [isTailwind, setIsTailwind] = useState<boolean>(false);
+
+  const apiBaseUrl = "https://iro-github.vercel.app/github/calendar"
 
   const colors = generateColorShades(theme);
   useEffect(() => {
@@ -147,18 +155,18 @@ const GitHubCalendar: React.FC<GitHubCalendarProps> = ({
   // Track months that have been displayed
   const displayedMonths = new Set<number>();
 
-  if (loading) return <div className={`${isTailwind ? "github-calendar-container" : "flex items-center justify-center text-sm lg:text-xl font-medium"}`}>Fetching Data from GitHub...</div>;
-  if (error) return <div className={`${isTailwind ? "github-calendar-container" : "flex items-center justify-center text-sm lg:text-xl font-medium"}`}>{error}</div>;
+  if (loading) return <div className={"flex items-center justify-center text-sm lg:text-xl font-medium"}>Fetching Data from GitHub...</div>;
+  if (error) return <div className={"flex items-center justify-center text-sm lg:text-xl font-medium"}>{error}</div>;
   return (
-    <div className={`${isTailwind ? "github-calendar-container" : "flex flex-col space-y-2 px-2 w-full rounded-lg border border-gray-300 p-1.5"}`}>
+    <div className={twMerge("flex flex-col space-y-2 px-2 w-full rounded-lg border border-gray-300 p-1.5", classNames?.calenderContainer)}>
       {/* Month Labels */}
-      <div className={`${isTailwind ? "github-calendar-month-labels" : "grid grid-cols-[auto,repeat(53,minmax(0,1fr))] text-[0.5rem] lg:text-xs font-medium text-gray-600"}`}>
-        <div className="w-5 lg:w-6" style={{ width: "20px" }}></div>
+      <div className={twMerge("grid grid-cols-[auto,repeat(53,minmax(0,1fr))] text-[0.5rem] lg:text-xs font-medium text-gray-600", classNames?.monthLabels)}>
+        <div className="w-5 lg:w-6"></div>
         {contributions.map((week, weekIdx) => {
           const firstDayOfWeek = new Date(week.days[0]?.date);
           const month = getMonth(firstDayOfWeek);
 
-          
+
           if (!displayedMonths.has(month)) {
             displayedMonths.add(month);
             return (
@@ -172,25 +180,24 @@ const GitHubCalendar: React.FC<GitHubCalendarProps> = ({
         })}
       </div>
 
-      <div className={`${isTailwind ? "github-calendar-grid" : "relative grid grid-cols-[auto,repeat(53,minmax(0,1fr))] gap-0.5"}`}>
-        
-        <div className={`${isTailwind ? "github-calendar-days" : "flex flex-col gap-1"}`}>
+      <div className={twMerge("relative grid grid-cols-[auto,repeat(53,minmax(0,1fr))] gap-0.5", classNames?.dayLabels)}>
+        <div className={"flex flex-col gap-1"}>
           {daysOfWeek.map((day, dayIdx) => (
-            <div key={dayIdx} className={`${isTailwind ? "github-calendar-day" : "text-[0.5rem] lg:text-xs text-gray-500 w-5 lg:w-7 h-full select-none"}`}>
+            <div key={dayIdx} className={"text-[0.5rem] lg:text-xs text-gray-500 w-5 lg:w-7 h-full select-none"}>
               {dayIdx % 2 !== 0 ? <div>{day}</div> : <div></div>}
             </div>
           ))}
         </div>
-        <div className={`${isTailwind ? "github-calendar-total" : "absolute left-5 -bottom-8 text-[0.5rem] lg:text-xs"}`}>
+        <div className={"absolute left-5 -bottom-8 text-[0.5rem] lg:text-xs"}>
           Total Contributions : {totalContribution}
         </div>
-        <div className={`${isTailwind ? "github-calendar-legend-container" : "text-[0.5rem] lg:text-xs absolute -bottom-8 right-10 flex items-center justify-center gap-2 select-none"}`}>
+        <div className={twMerge("text-[0.5rem] lg:text-xs absolute -bottom-8 right-10 flex items-center justify-center gap-2 select-none", classNames?.gridClass)}>
           <span>less</span>
-          <div className={`${isTailwind ? "github-calendar-legend" : "flex items-center justify-center gap-1"}`}>
+          <div className={"flex items-center justify-center gap-1"}>
             {colors.map((color, dayIdx) => (
               <div
                 key={dayIdx}
-                className={`${isTailwind ? "github-calendar-legend-box" : `w-2.5 h-2.5 lg:w-3.5 lg:h-3.5 rounded-sm transition-all duration-200 cursor-pointer`}`}
+                className={"w-2.5 h-2.5 lg:w-3.5 lg:h-3.5 rounded-sm transition-all duration-200 cursor-pointer"}
                 style={{ backgroundColor: color }}
               />
             ))}
@@ -198,7 +205,7 @@ const GitHubCalendar: React.FC<GitHubCalendarProps> = ({
           <span>more</span>
         </div>
         {contributions.map((week, weekIdx) => (
-          <div key={weekIdx} className={`${isTailwind ? "github-calendar-column" : "flex flex-col gap-1"}`}>
+          <div key={weekIdx} className={"flex flex-col gap-1"}>
             {Array.from({ length: 7 }).map((_, dayIdx) => {
               const day =
                 week.days.find((d) => new Date(d.date).getDay() === dayIdx) ||
@@ -211,7 +218,7 @@ const GitHubCalendar: React.FC<GitHubCalendarProps> = ({
                 <div
                   key={dayIdx}
                   title={`${day.date}: ${day.contributions} contributions`}
-                  className={`${isTailwind ? `github-calendar-box ${day.date === formattedDate ? "github-calendar-box-active" : ""}` : `w-2.5 h-2.5 lg:w-3.5 lg:h-3.5 rounded-sm transition-all duration-200 cursor-pointer ${day.date === formattedDate ? "scale-105 animate-pulse" : ""}`}`}
+                  className={twMerge(`w-2.5 h-2.5 lg:w-3.5 lg:h-3.5 rounded-sm transition-all duration-200 cursor-pointer ${day.date === formattedDate ? "scale-105 animate-pulse" : ""}`, classNames?.gridClass)}
                   style={{ backgroundColor: day.date === "N/A" ? "transparent" : getColor(day.contributions) }}
                 />
               );
