@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { format, getMonth } from "date-fns";
+//import { format, getMonth } from "date-fns";
 import styles from "./calenderStyles.module.css";
 import clsx from "clsx";
 
@@ -159,7 +159,7 @@ const GitHubCalendar: React.FC<GitHubCalendarProps> = ({
         <div style={{ width: '1.25rem' }}></div>
         {contributions.map((week, weekIdx) => {
           const firstDayOfWeek = new Date(week.days[0]?.date);
-          const month = getMonth(firstDayOfWeek);
+          const month = firstDayOfWeek.getMonth();
 
 
           if (!displayedMonths.has(month)) {
@@ -207,7 +207,8 @@ const GitHubCalendar: React.FC<GitHubCalendarProps> = ({
                 { date: "N/A", contributions: 0 };
 
               const currentDate = new Date();
-              const formattedDate = format(currentDate, "yyyy-MM-dd");
+              const formattedDate = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, "0")}-${String(currentDate.getDate()).padStart(2, "0")}`;
+
 
               return (
                 <div

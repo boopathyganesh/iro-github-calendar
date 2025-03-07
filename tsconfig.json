@@ -5,8 +5,8 @@
     "target": "ESNext",
     "jsx": "react-jsx",
     "declaration": true,
+    "declarationDir": "dist",
     "declarationMap": true,
-    "emitDeclarationOnly": true, 
     "sourceMap": true,
     "strict": true,
     "moduleResolution": "node",
@@ -14,5 +14,6 @@
     "esModuleInterop": true,
     "skipLibCheck": true
   },
-  "include": ["src", "index.ts"]
+  "include": ["src", "src/index.ts"],
+  "files": ["src/global.d.ts"]
 }
